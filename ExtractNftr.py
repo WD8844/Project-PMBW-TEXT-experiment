@@ -38,14 +38,13 @@ def ExtractNftr(filename):
 
 
 if __name__ =="__main__":
-import sys
-if len(sys.argv) != 2:
-    print("使用方法: ExtractNftr.py <文件名>")
-    exit()
-else:
-    filename = sys.argv[1]
-    try:
-        ExtractNftr(filename)
-    except FileNotFoundError:
-        print(f"未找到名为{filename}的文件，请重新操作。")
+    import sys
+    if len(sys.argv) != 2:
+        print("使用方法: ExtractNftr.py <文件名>")
+    else:
+        filename = sys.argv[1]
+        try:
+            ExtractNftr(filename)
+        except FileNotFoundError:
+            print(f"未找到名为{filename}的文件，请重新操作。")
     
