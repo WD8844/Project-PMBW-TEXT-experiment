@@ -1,6 +1,6 @@
-#由做好的整合码表重新按码替换原始CMAP码表
-newchscodefile = 'a023-0_CHS_test.TBL'#所有的3个字库的码表相同
-with open('a023-0_CHS_test.TBL',"r",encoding= 'utf-16')as cf:#锁定中文部分的码表字模序
+#Replace the original CMAP table with the newly integrated code table
+newchscodefile = 'a023-0_CHS_test.TBL'# All three font library have the same code table
+with open('a023-0_CHS_test.TBL',"r",encoding= 'utf-16')as cf:# Make sure the first and the last code of Chinese characters in codelist
     raws = cf.read().split("\n")
     flag = 0
     for raw in raws:
@@ -15,7 +15,7 @@ with open('a023-0_CHS_test.TBL',"r",encoding= 'utf-16')as cf:#锁定中文部分
 print(first)
 print(last)
 for num in range(3):
-    filename = "a023_extr/a023-" + str(num)
+    filename = "a023_extr/a023-" + str(num)#the location  of font narc in the ROM of BW  is a/0/2/3;I export it in ./a023_extr/
     new = "_new"
     encoding = "utf16"
     MCodedict = dict()
@@ -26,8 +26,8 @@ for num in range(3):
             if raw[i] != "":
                 #print(raw[i])
                 trans = raw[i].split("=")
-                if len(trans[0]) > 1 and trans[0][0] == "0":#说明是改过的十六进制数编码序
-                    id = str(int(trans[0],base = 16))#必须转为10进制，否则下面替换过程key无法对应
+                if len(trans[0]) > 1 and trans[0][0] == "0":# Indicates that this is a modified hex code sequence
+                    id = str(int(trans[0],base = 16))# Must convert to decimal; otherwise, the key in the replacement process will not match
                 else:
                     id = trans[0]
                 if "==" in raw[i]:
@@ -57,7 +57,7 @@ for num in range(3):
                 #print(CMAPdictList[i][key],MCodedict[key])
                 if CMAPdictList[i][key] != MCodedict[key]:
                     print("将字模序为{}的字符 {} 修改为：{}".format(key,CMAPdictList[i][key],MCodedict[key]))
-                    CMAPdictList[i][key] = MCodedict[key]#对码替换
+                    CMAPdictList[i][key] = MCodedict[key]# One-to-one replacement
     #print(len(CMAPdictList))
     for i in range(len(CMAPdictList)):
         writelist = []
