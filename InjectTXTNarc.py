@@ -17,7 +17,17 @@ def InjectNarcFiles_byTXT(dirname,encoding = 'utf-16'):
             f.write(inputs)
 
 if __name__ == "__main__":
-    for num in range(2):
-        dirname = 'B(CH)' + str(num+2) + '_extr'
-        #dirname = 'testdir'
-        InjectNarcFiles_byTXT(dirname)
+    import sys
+    encoding = "utf-16"
+    if len(sys.argv) not in [2,3]:
+        print("使用方法: ExtractNftr.py <文件目錄> <编码：默认是utf-16>")
+        exit()
+    elif len(sys.argv)==2:
+        dirname = sys.argv[1]
+    elif len(sys.argv)==3:
+        dirname = sys.argv[1]
+        encoding = sys.argv[2]
+    try:
+            InjectNarcFiles_byTXT(dirname,encoding)
+    except FileNotFoundError:
+            print(f"未找到名为{filename}的文件，请重新操作。")
