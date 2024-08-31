@@ -351,7 +351,7 @@ def rightdownShadow(buffer,bpp):
 
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":#Just for the code test.
     def bpp1To2test():#1bpp拓展到2bpp的SIMSUN2字体一条龙测试
         char = "白"
         FONT = 'SIMSUN2.TTC'
