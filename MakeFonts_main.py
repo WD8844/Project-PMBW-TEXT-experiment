@@ -24,7 +24,7 @@ def MakeFont_1bppTo(char,FONT,fontsize,bpp,reshape = (0,0),method = "rightdownSh
         buffer = reshape16(buffer,width=width,height=height,bpp=bpp,blod=blod)
     return buffer
 
-def MakeFont_8bppTo(char,FONT,fontsize,bpp,reshape = (0,0)):
+def MakeFont_8bppTo(char,FONT,fontsize,bpp,reshape = (0,0)):#未完工
     bitmapbuffer = CharBitmapCreator(char,FONT,fontsize = fontsize)
 
 def main(CHSCodeSource,FONT,ofilename,bpp,fontsize = 12,reshape = (0,0),method = "rightdownShadow",bitmaps = '1bppTo'):
@@ -50,6 +50,9 @@ def main(CHSCodeSource,FONT,ofilename,bpp,fontsize = 12,reshape = (0,0),method =
             f.write(struct.pack('B',i))
 
 if __name__ == "__main__":
+    import sys
+    if len(sys.argv) != 3:
+        print("使用方法: ExtractNarc.py <中文码表文件> <中文字体文件：例如SIMSUN2.TTC> <bpp：1|2|4|8> <字体大小>")
     CHSCodeSource = "CHS.TBL"
     FONT = 'SIMSUN2.TTC'
     bpp = 2
