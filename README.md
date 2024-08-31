@@ -1,3 +1,7 @@
+# 准备工作
+## 导出Narc
+使用[tinke](https://github.com/pleonex/tinke)读取*.nds导出a/0/0/2、a/0/0/3和a/0/2/3
+# 文本处理
 ## 整体流程：
 改文本→做码表→改字库→文本和字库都导入narc打包→tinke导入对应New
 
