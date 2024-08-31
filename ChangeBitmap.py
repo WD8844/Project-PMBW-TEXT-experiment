@@ -1,4 +1,4 @@
-with open('a023-0_CHS_test.TBL',"r",encoding= 'utf-16')as cf:#锁定中文部分的码表字模序
+with open('a023-0_CHS_test.TBL',"r",encoding= 'utf-16')as cf:#'a023-0_CHS_test.TBL' is the file name of Chinese encodelist
     raws = cf.read().split("\n")
     flag = 0
     for raw in raws:
