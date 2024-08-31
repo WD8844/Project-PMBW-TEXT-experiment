@@ -35,8 +35,23 @@ def ExtractNftr(filename):
                     w.write(s)
             i += 1
 
-if __name__ == "__main__":
-    dirname = 'a023_extr/'
-    for i in range(3):
-        filename = dirname + "a023-" + str(i)
-        ExtractNftr(filename)
+import sys
+
+def main():
+    # 检查是否提供了参数
+    
+    if len(sys.argv) != 2:
+        print("使用方法: ExtractNftr.py <文件名>")
+        return
+    
+    filename = sys.argv[1]
+    
+    try:
+        dirname = filename+'_extr'
+        ExtractNftr(filename,dirname,type = 'text')
+    except FileNotFoundError:
+        print(f"未找到名为{filename}的文件，请重新操作。")
+
+if __name__ =="__main__":
+    main()
+    
