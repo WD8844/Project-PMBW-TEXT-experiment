@@ -174,5 +174,5 @@ def main():
     except FileNotFoundError:
         print(f"未找到名为{filename}或及其相关的文件，请重新操作。")
 if __name__ == "__main__":
-    main
+    main()
 
