@@ -75,7 +75,7 @@ def MakeCMP_TH(CMPdirpath,encoding = 'utf-16',mknewdir = False):
         CMPname = CMPdirpath + CMPname
         GetCMP.KeepTH(CMPname,encoding = encoding,mknewdir = mknewdir)
 
-if __name__ == "__main__":
+if __name__ == "__main__":#This is just for code testing
     for i in range(2,4):
         num = str(i)
         nstr = num + '_extr'
