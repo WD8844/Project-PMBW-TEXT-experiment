@@ -158,21 +158,16 @@ def InjectNftr(filename):
         nfilename = filename#因为打包逻辑只认无后缀文件，必须直接导入原文件
         with open(nfilename,"wb")as f:
             nftr.toFile(f)
-import sys
 
-def main():
-    # 检查是否提供了参数
-    
-    if len(sys.argv) != 2:
-        print("使用方法: InjectNftr.py <原Narc的文件名>")
-        return
-    
+if __name__ == "__main__":
+import sys
+#检查是否提供了参数
+if len(sys.argv) != 2:
+    print("使用方法: InjectNftr.py <原Narc的文件名>")
+else:
     filename = sys.argv[1]
-    
     try:
         InjectNftr(filename)
     except FileNotFoundError:
         print(f"未找到名为{filename}或及其相关的文件，请重新操作。")
-if __name__ == "__main__":
-    main()
 
