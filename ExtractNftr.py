@@ -47,8 +47,7 @@ def main():
     filename = sys.argv[1]
     
     try:
-        dirname = filename+'_extr'
-        ExtractNftr(filename,dirname,type = 'text')
+        ExtractNftr(filename)
     except FileNotFoundError:
         print(f"未找到名为{filename}的文件，请重新操作。")
 
