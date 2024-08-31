@@ -32,24 +32,21 @@ def ExtractNarc(filename,dirname,type = 'text'):
                 with open(tfilename, 'wb')as nf:
                     nf.write(f)
                 n += 1
-import sys
 
-def main():
+
+if __name__ =="__main__":
+    import sys
     # 检查是否提供了参数
-    
+
     if len(sys.argv) != 3:
         print("使用方法: ExtractNarc.py <文件名> <处理类型：输入text或file>")
-        return
-    
+
     filename = sys.argv[1]
     type = sys.argv[2]
-    
+        
     try:
         dirname = filename+'_extr'
         ExtractNarc(filename,dirname,type = type)
     except FileNotFoundError:
         print(f"未找到名为{filename}的文件，请重新操作。")
-
-if __name__ =="__main__":
-    main()
 
