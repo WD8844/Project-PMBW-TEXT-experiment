@@ -112,7 +112,8 @@ def KeepTH(cmpfilename,encoding = 'utf-16',mknewdir = False):
         textsrteam = "".join(writetexts)
         with open(output_filename,'w',encoding=encoding)as w:
             w.write(textsrteam)
-if __name__ == "__main__":
+
+if __name__ == "__main__":#This is just for code testing
     jpfilename = './testdir/B(JP)2-44.txt'
     chfilename = './testdir/B(CH)2-44.txt'
     cmpfilename = CMP(jpfilename,chfilename,mknewdir=True)
