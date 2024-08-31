@@ -43,12 +43,11 @@ def main():
     
     filename = sys.argv[1]
     
-    # 在这里对文件进行操作
     try:
         dirname = filename+'_extr'
         ExtractNarc(filename,dirname,type = 'text')
     except FileNotFoundError:
-        print(f"File {filename} not found.")
+        print(f"未找到名为{filename}的文件，请重新操作。")
 
 if __name__ =="__main__":
     main()
