@@ -68,7 +68,7 @@ def txtCombine_byBlock(filename, blocknums = 2,encoding = 'utf-16',fmnewdir = Fa
     with open(filename,'w',encoding=encoding)as w:
         w.write(textsrteam)
 
-if __name__ == "__main__":
+if __name__ == "__main__":#This is just for code testing
     #分片
     filename = './testdir/B2_CMP/CMP_B2-44.txt'
     with open(filename,encoding='utf-16')as f:
