@@ -1,5 +1,5 @@
 #Replace the original CMAP table with the newly integrated code table
-newchscodefile = 'a023-0_CHS_test.TBL'# All three font library have the same code table
+newchscodefile = 'a023-0_CHS_test.TBL'# All three font library have the same code table. I have named my Chinese code table as 'a023-0_CHS_test.TBL'
 with open('a023-0_CHS_test.TBL',"r",encoding= 'utf-16')as cf:# Make sure the first and the last code of Chinese characters in codelist
     raws = cf.read().split("\n")
     flag = 0
@@ -15,7 +15,8 @@ with open('a023-0_CHS_test.TBL',"r",encoding= 'utf-16')as cf:# Make sure the fir
 print(first)
 print(last)
 for num in range(3):
-    filename = "a023_extr/a023-" + str(num)#the location  of font narc in the ROM of BW  is a/0/2/3;I export it in ./a023_extr/
+    filename = "a023_extr/a023-" + str(num)#the location  of font narc in the ROM of BW  is a/0/2/3;
+    #I have renamed the font narc as "a023" and export it at ./a023_extr/
     new = "_new"
     encoding = "utf16"
     MCodedict = dict()
