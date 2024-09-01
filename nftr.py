@@ -380,7 +380,7 @@ class NFTR:
     def toFile(self, f):
         f.write(self.toString())
 
-if __name__ =="__main__":
+if __name__ =="__main__":#Just for code testing
     import csv
     filename = 'a023_extr/a023-0'
     with open(filename,'rb')as f:
