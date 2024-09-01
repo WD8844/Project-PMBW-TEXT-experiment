@@ -20,7 +20,7 @@ if __name__ == "__main__":
     import sys
     encoding = "utf-16"
     if len(sys.argv) not in [2,3]:
-        print("使用方法: ExtractNftr.py <文件目錄> <编码：默认是utf-16>")
+        print("使用方法: InjectTXTNarc.py <*.txt和对应分片文本文件的目錄> <编码：默认是utf-16>")
         exit()
     elif len(sys.argv)==2:
         dirname = sys.argv[1]
@@ -29,5 +29,5 @@ if __name__ == "__main__":
         encoding = sys.argv[2]
     try:
             InjectNarcFiles_byTXT(dirname,encoding)
-    except FileNotFoundError:
-            print(f"未找到名为{filename}的文件，请重新操作。")
+    except Exception as e:
+    print(f"錯誤: {e}，请重新操作。")
