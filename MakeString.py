@@ -366,7 +366,7 @@ def maketxtput(raw):  # raw是file.readlines()
     return texts
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":#Just for code testing
     # 导出单个分片文本
     filename = 'B(JP)2-13'
     with open(filename, 'rb') as f:
