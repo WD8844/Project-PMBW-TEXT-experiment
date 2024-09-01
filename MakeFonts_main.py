@@ -51,31 +51,40 @@ def main(CHSCodeSource,FONT,ofilename,bpp,fontsize = 12,reshape = (0,0),method =
 
 if __name__ == "__main__":
     import sys
-    if len(sys.argv) != 3:
-        print("使用方法: ExtractNarc.py <中文码表文件> <中文字体文件：例如SIMSUN2.TTC> <bpp：1|2|4|8> <字体大小>")
-    CHSCodeSource = "CHS.TBL"
-    FONT = 'SIMSUN2.TTC'
-    bpp = 2
-    for num in range(3):
-        if num == 0:
-            fontsize = 12
-            width = fontsize
-            height = fontsize + 3
-            method = "rightdownShadow"
-        elif num == 1:
-            fontsize = 10
-            width = fontsize
-            height = fontsize
-            method = "rightdownShadow"
-        else:
-            fontsize = 10
-            width = fontsize + 1
-            height = fontsize + 3
-            method = "blodShadow"
-
-        num = str(num)
+    if len(sys.argv) != 9:
+        print("使用方法: MakeFonts_main.py <中文码表文件> <中文字体文件：例如SIMSUN2.TTC> <bpp：1|2|4|8> \
+        <字体大小> <单字模宽width> <单字模高height> <阴影方法：rightdownShadow|blodShadow> <输出文件名>")
+    else:
+        CHSCodeSource = sys.argv[1]
+        FONT = sys.argv[2]
+        bpp = sys.argv[3]
+        fontsize = sys.argv[4]
+        width = sys.argv[5]
+        height = sys.argv[6]
+        method = sys.argv[7]
+        ofilename = sys.argv[8]
         reshape = (width,height)
-
-        ofilename = 'a023-'+ num + '-chs'
         main(CHSCodeSource,FONT,ofilename,bpp,fontsize = fontsize,reshape = reshape,method = method)
+        '''for num in range(3):#This is my example. As the PMBW has 3 font sets, they have different features.
+            if num == 0:
+                fontsize = 12
+                width = fontsize
+                height = fontsize + 3
+                method = "rightdownShadow"
+            elif num == 1:
+                fontsize = 10
+                width = fontsize
+                height = fontsize
+                method = "rightdownShadow"
+            else:
+                fontsize = 10
+                width = fontsize + 1
+                height = fontsize + 3
+                method = "blodShadow"
+    
+            num = str(num)
+            reshape = (width,height)
+    
+            ofilename = 'a023-'+ num + '-chs'
+            main(CHSCodeSource,FONT,ofilename,bpp,fontsize = fontsize,reshape = reshape,method = method)'''
 
