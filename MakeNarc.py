@@ -47,11 +47,15 @@ def MakeNarc(aimfile, dirname):
         NewNarc.toFile(f)
 
 if __name__ == "__main__":
-    for num in range(2):
-        aimfile = 'B(CH)'+ str(num+2)#文本
+    import sys
+    if len(sys.argv) != 2:
+        print("使用方法: MakeNarc.py <原Narc文件名>")
+    else:
+        aimfile = sys.argv[1]
         dirname = aimfile + '_extr'
-        MakeNarc(aimfile, dirname)
-
-    '''aimfile = 'a023'#字库
-    dirname = aimfile + '_extr'
-    MakeNarc(aimfile, dirname)'''
+        try:
+            MakeNarc(aimfile, dirname)
+        except Exception as e:
+            print(f"错误：{e}")
+            
+            
