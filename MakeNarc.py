@@ -56,6 +56,6 @@ if __name__ == "__main__":
         try:
             MakeNarc(aimfile, dirname)
         except Exception as e:
-            print(f"错误：{e}")
+            print(f"错误：{e}，请重新操作。")
             
             
