@@ -18,7 +18,9 @@ a/0/0/3 重命名为 B(JP)3
 
 a/0/2/3 重命名为 a023
 
-将这些Narc文件与*.py放在同级目录下，在控制台Command Line(CMD)中按ExtractNarc.py <文件名> <处理类型：输入text（文本）或file（其它）>执行语句：
+将这些Narc文件与*.py放在同级目录下，在控制台Command Line(CMD)中按
+
+ExtractNarc.py <文件名> <处理类型：输入text（文本）或file（其它）>执行语句：
 
 >>ExtractNarc.py B(JP)2 text
 
