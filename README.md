@@ -2,14 +2,22 @@
 ## 从ROM中导出Narc
 使用[tinke](https://github.com/pleonex/tinke)读取*.nds导出a/0/0/2、a/0/0/3和a/0/2/3
 其中：
+
 a/0/0/2 系统文本集
+
 a/0/0/3 剧情文本集
+
 a/0/2/3 字体集（字库）
+
 ## 分解Narc
 為了方便後續操作，建议将上述通过tinke提取出来的文件重命名，以日版(JP)为例：
+
 a/0/0/2 → B(JP)2
+
 a/0/0/3 → B(JP)3
+
 a/0/2/3 → a023
+
 ExtractNarc.py
 # 2.文本处理
 ## 整体流程
