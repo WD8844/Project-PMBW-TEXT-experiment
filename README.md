@@ -12,13 +12,24 @@ a/0/2/3 字体集（字库）
 ## 分解Narc
 為了方便後續操作，建议将上述通过tinke提取出来的文件重命名，以日版(JP)为例：
 
-a/0/0/2 → B(JP)2
+a/0/0/2 重命名为 B(JP)2
 
-a/0/0/3 → B(JP)3
+a/0/0/3 重命名为 B(JP)3
 
-a/0/2/3 → a023
+a/0/2/3 重命名为 a023
 
-ExtractNarc.py
+控制台语句：
+
+*ExtractNarc.py B(JP)2*
+
+*ExtractNarc.py B(JP)3*
+
+*ExtractNarc.py a023*
+
+由此就创建了：
+
+B(JP)2_extr、B(JP)3_extr和a023_extr这三个分别对应B(JP)2、B(JP)3和a023的文件夹，其中包含其解包后按照编号命名的文件块。
+
 # 2.文本处理
 ## 整体流程
 改文本→做码表→改字库→文本和字库都导入narc打包→tinke导入对应New
