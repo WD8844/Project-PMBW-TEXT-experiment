@@ -1,6 +1,6 @@
 # 1.准备工作
 ## 从ROM中导出Narc
-使用[tinke](https://github.com/pleonex/tinke)读取*.nds导出a/0/0/2、a/0/0/3和a/0/2/3
+使用[tinke](https://github.com/pleonex/tinke)读取*.nds导出a/0/0/2、a/0/0/3和a/0/2/3这三个Narc文件
 其中：
 
 a/0/0/2 系统文本集
@@ -10,7 +10,7 @@ a/0/0/3 剧情文本集
 a/0/2/3 字体集（字库）
 
 ## 分解Narc
-為了方便後續操作，建议将上述通过tinke提取出来的文件重命名，以日版(JP)为例：
+為了方便後續操作，建议将上述通过tinke提取出来的文件重命名，以日版(JP)的Narc文件为例：
 
 a/0/0/2 重命名为 B(JP)2
 
@@ -18,17 +18,17 @@ a/0/0/3 重命名为 B(JP)3
 
 a/0/2/3 重命名为 a023
 
-控制台语句：
+将这些Narc文件与*.py放在同级目录下，在控制台Command Line(CMD)中执行语句：
 
-*ExtractNarc.py B(JP)2*
+>>ExtractNarc.py B(JP)2 text
 
-*ExtractNarc.py B(JP)3*
+>>ExtractNarc.py B(JP)3 text
 
-*ExtractNarc.py a023*
+>>ExtractNarc.py a023 file
 
 由此就创建了：
 
-B(JP)2_extr、B(JP)3_extr和a023_extr这三个分别对应B(JP)2、B(JP)3和a023的文件夹，其中包含其解包后按照编号命名的文件块。
+B(JP)2_extr、B(JP)3_extr和a023_extr这三个分别对应B(JP)2、B(JP)3和a023的子文件夹，其中包含其解包后按照编号命名的文件块。
 
 # 2.文本处理
 ## 整体流程
