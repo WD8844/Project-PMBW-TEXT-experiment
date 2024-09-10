@@ -1,33 +1,29 @@
 import MakeString
 import os
 #批量将txt导入各分节，并加密
-def InjectNarcFiles_byTXT(dirname,encoding = 'utf-16'):
-    fileslist = os.listdir(dirname)
-    for filename in fileslist:
-        if '.txt' in filename or "CMP" in filename:
+def InjectNarcFiles_byTXT(dirpath,encoding = 'utf-16'):
+    fileslist = os.listdir(dirpath)
+    for filepath in fileslist:
+        if '.txt' in filepath or "CMP" in filepath:
             continue
-        aimname = dirname + '/' + filename
-        with open(aimname + '.txt', 'r',encoding=encoding)as txtf:
+        aimpath = dirpath + '/' + filepath
+        with open(aimpath + '.txt', 'r',encoding=encoding)as txtf:
             raw = txtf.readlines()
             texts = MakeString.maketxtput(raw)#将文本处理为gen5put()可处理的entry列表形式
-            print(filename)
+            print(filepath)
             #print(texts)
             inputs = MakeString.gen5put(texts)
-        with open(aimname, 'wb')as f:
+        with open(aimpath, 'wb')as f:
             f.write(inputs)
 
 if __name__ == "__main__":
     import sys
-    encoding = "utf-16"
-    if len(sys.argv) not in [2,3]:
-        print("使用方法: InjectTXTNarc.py <*.txt和对应分片文本文件的目錄> <编码：默认是utf-16>")
+    if len(sys.argv) != 2:
+        print("使用方法: .\InjectTXTNarc.py <*.txt和对应分片文本文件的路径>")
         exit()
-    elif len(sys.argv)==2:
-        dirname = sys.argv[1]
-    elif len(sys.argv)==3:
-        dirname = sys.argv[1]
-        encoding = sys.argv[2]
-    try:
-            InjectNarcFiles_byTXT(dirname,encoding)
-    except Exception as e:
-    print(f"錯誤: {e}，请重新操作。")
+    else:
+        dirpath = sys.argv[1]
+        try:
+            InjectNarcFiles_byTXT(dirpath)
+        except Exception as e:
+            print(f"錯誤: {e}，请重新操作。")

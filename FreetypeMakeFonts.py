@@ -14,9 +14,16 @@ def CharBitmapCreator(char,FONT,fontsize = 12,blod = False):
     #print(len(data))
     #print(data)
     if fontsize < 11:
-        if FONT == 'SIMSUN2.TTC':
+        if bitmap.pixel_mode == 1:#Only make operation for 1bpp fonts
+            #freetype.FT_PIXEL_MODES
+            #{'FT_PIXEL_MODE_NONE': 0,'FT_PIXEL_MODE_MONO'（1bpp）: 1,
+            # 'FT_PIXEL_MODE_GRAY'（8bpp）: 2, 'FT_PIXEL_MODE_GRAY2'（2bpp）: 3,
+            # 'FT_PIXEL_MODE_GRAY4'（4bpp）: 4,'FT_PIXEL_MODE_LCD': 5,
+            # 'FT_PIXEL_MODE_LCD_V': 6, 'FT_PIXEL_MODE_MAX': 7}
             buffer.extend(data[2:])
             buffer.extend(data[:2])
+        else:
+            buffer.extend(data)
     else:
         buffer.extend(data)
     if blod:
@@ -263,7 +270,7 @@ def full_Q(buffer,width,height,Awidth,bpp):
 def reshape16(buffer,width,height,bpp,blod = False):
     #输入宽度小于等于16的没有填充的字模Bytes列表，规定>=原始width和height，由此填充（仅用于1bpp拓展的字体）
     if (width * width)*bpp/8 > len(buffer):
-        raise KeyError("指定的width或height与字模大小不匹配，width * height应该小于{}".format(len(buffer)))
+        raise KeyError(f"指定的width：{width}与字模大小不匹配，width * height应该小于{len(buffer)}")
     transbuffer = combineBytes(buffer,bpp)
     addh= height-len(transbuffer)
     pixelnum = 16
@@ -416,5 +423,5 @@ if __name__ == "__main__":#This is just for code testing
         with open('testfont_8to4bpp_Q',"wb")as f:
             for data in qbuffer:
                     f.write(struct.pack('B',data))
-    #bpp1To2test()
-    bpp8To4test()
+    bpp1To2test()
+    #bpp8To4test()

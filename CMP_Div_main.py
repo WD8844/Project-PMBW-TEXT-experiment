@@ -1,9 +1,9 @@
 from MakeCMP_Div import *
 def main(jpdir,chdir,nstr,method = None,path = None,blocknums = 2,encoding = 'utf-16',newdir = True):
-    jpdirname = jpdir + nstr
-    chdirname = chdir + nstr
+    jpdirpath = jpdir + nstr
+    chdirpath = chdir + nstr
     if method == "CMP":
-        CMPdirpath = MakeCMP(jpdirname,chdirname,encoding = encoding,mknewdir = newdir)
+        CMPdirpath = MakeCMP(jpdirpath,chdirpath,encoding = encoding,mknewdir = newdir)
         DivCMP(CMPdirpath,blocknums = blocknums,encoding = encoding,mknewdir = newdir)
     elif method == "Restore":
         CMPdirpath = path

@@ -382,20 +382,20 @@ class NFTR:
 
 if __name__ =="__main__":#Just for code testing
     import csv
-    filename = 'a023_extr/a023-0'
-    with open(filename,'rb')as f:
+    filepath = 'a023_extr/a023-0'
+    with open(filepath,'rb')as f:
         f.seek(0)
         rawdata = f.read()
         print("len(rawdata)",len(rawdata))
         nftr = NFTR(rawdata)
-        with open(filename + "宽度表.csv","w",newline="")as w:
+        with open(filepath + "宽度表.csv","w",newline="")as w:
             writer = csv.writer(w)
             writer.writerow(["loc","left","width","advance"])
             for i in range(len(nftr.fontsdata)):
                 l = [i]
                 l.extend(nftr.fontsdata[i])
                 writer.writerow(l)
-        with open(filename + "CWDH.csv","w",newline="")as w:
+        with open(filepath + "CWDH.csv","w",newline="")as w:
             writer = csv.writer(w)
             writer.writerow(["loc","width","tag"])
             widthtable = nftr.cwdh.WidthTable
@@ -403,14 +403,14 @@ if __name__ =="__main__":#Just for code testing
                 trans = [i]
                 trans.extend(widthtable[i])
                 writer.writerow(trans)
-        with open(filename + ".bitmap","wb")as w:
+        with open(filepath + ".bitmap","wb")as w:
             for bitmap in nftr.bitmaps:
                 w.write(bitmap)
         i = 0
         for cmap in nftr.CMAPTable:
             idxs = list(cmap.CodeTableDict.keys())
             codes = list(cmap.CodeTableDict.values())
-            with open(filename +"序码表_"+str(i)+ ".txt","w",encoding="utf16")as w:
+            with open(filepath +"序码表_"+str(i)+ ".txt","w",encoding="utf16")as w:
                 for j in range(len(idxs)):
                     s = str(idxs[j]) + "=" + chr(codes[j])+"\n"
                     w.write(s)

@@ -4,27 +4,27 @@ import os
 import struct
 #Narc文件打包
 
-def MakeNarc(aimfile, dirname):
+def MakeNarc(aimfile, dirpath):
     #构造按名称数字排序的文件名列表
-    dirlist = os.listdir(dirname)
-    namelist = []
+    dirlist = os.listdir(dirpath)
+    pathlist = []
     foward = dirlist[0].split('-')[0] + '-'
-    for filename in dirlist:
-        if '.' in filename:#文件夹内需要打包的文件没有后缀，因此需保证所有没有后缀的文件是打包文件
+    for filepath in dirlist:
+        if '.' in filepath:#文件夹内需要打包的文件没有后缀，因此需保证所有没有后缀的文件是打包文件
             continue
-        namelist.append(filename.split('-')[1])
-    namelist.sort(key=lambda x: int(re.findall(r'\d+', x)[0]))#按数字大小从小到大排序
-    for i in range(len(namelist)):
-        namelist[i] = foward + namelist[i]
+        pathlist.append(filepath.split('-')[1])
+    pathlist.sort(key=lambda x: int(re.findall(r'\d+', x)[0]))#按数字大小从小到大排序
+    for i in range(len(pathlist)):
+        pathlist[i] = foward + pathlist[i]
     
     rawdata = []
     offset = 0
     NewNarc = narc.NARC(rawdata)
-    for filename in namelist:
-        aimfilename = dirname + '/' + filename
-        with open(aimfilename, 'rb')as rawfile:
+    for filepath in pathlist:
+        aimfilepath = dirpath + '/' + filepath
+        with open(aimfilepath, 'rb')as rawfile:
             raw = rawfile.read()
-        #print(filename)
+        #print(filepath)
         #print(len(raw))
         table = struct.pack('II', offset, offset+len(raw))
         NewNarc.btaf.table.append(table)
@@ -49,12 +49,12 @@ def MakeNarc(aimfile, dirname):
 if __name__ == "__main__":
     import sys
     if len(sys.argv) != 2:
-        print("使用方法: MakeNarc.py <原Narc文件名>")
+        print("使用方法: .\MakeNarc.py <原Narc文件名>")
     else:
         aimfile = sys.argv[1]
-        dirname = aimfile + '_extr'
+        dirpath = aimfile + '_extr'
         try:
-            MakeNarc(aimfile, dirname)
+            MakeNarc(aimfile, dirpath)
         except Exception as e:
             print(f"错误：{e}，请重新操作。")
             

@@ -2,12 +2,13 @@ import csv
 from struct import pack
 from nftr import *
 #把导出的字库文件导入各Nftr分片中
-def InjectNftr(filename):
+def InjectNftr(narcfilename):
+    nftrpath = narcfilename+"_extr/"
     for i in range(3):
-        filename = filename + str(i)
+        filepath = nftrpath+narcfilename +"-"+ str(i)
         new = "_new"#修改
         #new = ""#复原
-        with open(filename,"rb")as f:
+        with open(filepath,"rb")as f:
             rawdata = f.read()
             nftr = NFTR(rawdata)
             cdict = nftr.cwdh.width0123dict
@@ -16,7 +17,7 @@ def InjectNftr(filename):
             cdict_inv = {values[i]:keys[i] for i in range(len(keys))}
     
         #制造cwdh的新宽度表1
-        csvfile = filename + 'CWDH'+new+'.csv'
+        csvfile = filepath + 'CWDH'+new+'.csv'
         with open(csvfile,"r") as r:
             reader = csv.DictReader(r)
             locs = []
@@ -91,7 +92,7 @@ def InjectNftr(filename):
         for cmap in nftr.CMAPTable:
             idxs = list(cmap.CodeTableDict.keys())
             codes = list(cmap.CodeTableDict.values())
-            with open(filename +"序码表_"+str(i)+ new +".txt","r",encoding="utf16")as txt:
+            with open(filepath +"序码表_"+str(i)+ new +".txt","r",encoding="utf16")as txt:
                 lines = txt.readlines()
                 if len(lines) > len(idxs):
                     raise LookupError("超出原始CMAP {}的可覆盖范围！".format(i))
@@ -122,7 +123,7 @@ def InjectNftr(filename):
             i += 1
     
         #重组数据+字模
-        csvfile = filename + "宽度表"+new+".csv"
+        csvfile = filepath + "宽度表"+new+".csv"
         with open(csvfile,"r",newline="")as f:
             datas = []
             reader = csv.reader(f)
@@ -135,7 +136,7 @@ def InjectNftr(filename):
                 datas.append(trans)
                 pos += 1
         fontsize = nftr.cglp.tfontsize - 3#a023-0单字模大小为45Byte，a023-1单字模大小为25Byte，a023-2单字模大小为36Byte
-        with open(filename + new +".bitmap","rb")as f:
+        with open(filepath + new +".bitmap","rb")as f:
             buffer = f.read()
         if len(nftr.bitmaps) < len(datas):
             raise LookupError("超出字模序列可覆盖范围！")
@@ -155,19 +156,23 @@ def InjectNftr(filename):
                 nftr.cglp.tfonts[j] = trans + buffer[j*fontsize:j*fontsize+fontsize]
                 print("已修改第{}个字模。".format(j))
     
-        nfilename = filename#因为打包逻辑只认无后缀文件，必须直接导入原文件
-        with open(nfilename,"wb")as f:
+        nfilepath = filepath#因为打包逻辑只认无后缀文件，必须直接导入原文件
+        with open(nfilepath,"wb")as f:
             nftr.toFile(f)
 
 if __name__ == "__main__":
-import sys
-#检查是否提供了参数
-if len(sys.argv) != 2:
-    print("使用方法: InjectNftr.py <原Narc的文件名>")
-else:
-    filename = sys.argv[1]
-    try:
-        InjectNftr(filename)
-    except FileNotFoundError:
-        print(f"未找到名为{filename}或及其相关的文件，请重新操作。")
+    import sys,os
+    #检查是否提供了参数
+    if len(sys.argv) != 2:
+        print("使用方法: .\InjectNftr.py <原Narc的文件路径>")
+    else:
+        narcname = sys.argv[1]
+        extrpath = narcname+"_extr/"
+        try:
+            if os.path.exists(extrpath):
+                InjectNftr(narcname)
+            else:
+                raise FileExistsError(f"{extrpath}不存在，请确认是否已利用ExtractNarc.py从目标Narc中正确提取了Nftr文件")
+        except Exception as e:
+            print(f"錯誤: {e}，请重新操作。")
 

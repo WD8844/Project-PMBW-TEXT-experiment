@@ -368,24 +368,24 @@ def maketxtput(raw):  # raw是file.readlines()
 
 if __name__ == "__main__":#Just for code testing
     # 导出单个分片文本
-    filename = 'B(JP)2-13'
-    with open(filename, 'rb') as f:
+    filepath = 'B(JP)2-13'
+    with open(filepath, 'rb') as f:
         texts = gen5get(f.read(),fillflag=True)
-        with open(filename + '.txt', 'w', encoding='utf16') as w:
+        with open(filepath + '.txt', 'w', encoding='utf16') as w:
             for line in texts:
                 w.writelines(line)
     print(texts)
     # 导入单个分片文本
-    ifilename = filename + '.test'
-    with open(filename + '.txt', 'r', encoding='utf16') as txtf:
+    ifilepath = filepath + '.test'
+    with open(filepath + '.txt', 'r', encoding='utf16') as txtf:
         raw = txtf.readlines()
         texts = maketxtput(raw)
-    with open(ifilename, 'wb') as f:
+    with open(ifilepath, 'wb') as f:
         f.write(gen5put(texts))
 
     # 再导出看和导出的原文本是否相同
-    with open(ifilename, 'rb') as f:
+    with open(ifilepath, 'rb') as f:
         texts = gen5get(f.read(),fillflag=True)
-        with open(ifilename + '.txt', 'w', encoding='utf16') as w:
+        with open(ifilepath + '.txt', 'w', encoding='utf16') as w:
             for line in texts:
                 w.writelines(line)
