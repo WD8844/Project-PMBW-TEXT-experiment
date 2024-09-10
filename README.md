@@ -10,6 +10,7 @@ a/0/0/3 剧情文本集
 a/0/2/3 字体集（字库）
 
 ## Narc解包
+*此处仅为示例*
 為了方便後續操作，建议将上述通过tinke提取出来的文件重命名，以日版(JP)的Narc文件为例：
 
 a/0/0/2 重命名为 B(JP)2
@@ -20,7 +21,7 @@ a/0/2/3 重命名为 a023
 
 将这些Narc文件与*.py放在同级目录下，在控制台Command Line(CMD)中按
 
-ExtractNarc.py <文件名> <处理类型：输入text（文本）或file（其它）>执行语句：
+ExtractNarc.py <narc文件名> <处理类型：输入text（文本）或file（其它）>执行语句：
 
 >>ExtractNarc.py B(JP)2 text
 
@@ -30,11 +31,15 @@ ExtractNarc.py <文件名> <处理类型：输入text（文本）或file（其�
 
 由此就创建了：
 
-B(JP)2_extr、B(JP)3_extr和a023_extr这三个分别对应B(JP)2、B(JP)3和a023的子文件夹，其中包含其解包后按照编号命名的文件块。
+B(JP)2_extr、B(JP)3_extr和a023_extr这三个分别对应B(JP)2、B(JP)3和a023的子文件夹。
+
+B(JP)2_extr、B(JP)3_extr内应当有解包后按照<>编号命名的文件块（无后缀）和对应的解密后的文本*.txt
+
+a023_extr内应当只有解包后按照编号命名的文件块（无后缀）
 
 # 2.文本处理
 ## 整体流程
-改文本→做码表→改字库→文本和字库都导入narc打包→tinke导入对应New
+拆文本→翻译（修改）文本→做码表→改字库→文本和字库都导入narc打包→tinke导入对应New
 
 ## 文本导入打包流程
 用CMP_Div_main.py组合文本
