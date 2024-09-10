@@ -54,7 +54,10 @@ if __name__ == "__main__":
         aimfile = sys.argv[1]
         dirpath = aimfile + '_extr'
         try:
-            MakeNarc(aimfile, dirpath)
+            if os.path.exists(dirpath):
+                MakeNarc(aimfile, dirpath)
+            else:
+                raise FileExistsError(f"{dirpath}不存在，请确认是否已利用ExtractNarc.py从目标Narc中正确提取了Nftr文件")
         except Exception as e:
             print(f"错误：{e}，请重新操作。")
             
