@@ -15,7 +15,7 @@ if __name__ == "__main__":
                         nftrfilepath = nftrfile + "-" + str(i)
                         totalpath = CodeListTotal.Total_txt(nftrfilepath,dirpath = dirpath)
                         tlist.append(totalpath)
-                    i = input(f"已在程式脚本同目录下生成3个字库对应的全码表\n{tlist[0]}、\n{tlist[1]}、\n{tlist[2]}，\n这3个码表的内容应当完全相同。"
+                    i = input(f"已在程式脚本同目录下生成3个字库对应的全码表\n{tlist[0]}\n{tlist[1]}\n{tlist[2]}\n这3个码表的内容应当完全相同。"
                               f"\n确认无误后，请任选一个码表作为原始码表（输入0，1，2中的任意一个数字）：")
                     totalCLpath = tlist[int(i)]
             else:
