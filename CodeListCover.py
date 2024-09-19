@@ -30,7 +30,7 @@ def Cover_txt(totalCLpath,coverL,newCLpath = "NewCodeList.txt"):
             s = l[0] + "=" +l[1] + "\n"
             w.write(s)
 
-if __name__ == "__main__":
+if __name__ == "__main__":#Just for the code test.
     from SetCharCounts import *
     totalCLpath = "a023-0_Total.txt"
     coverL = SetCharCounts("./Counts")

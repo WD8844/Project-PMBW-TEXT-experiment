@@ -10,7 +10,7 @@ def MakeNarc(aimfile, dirpath):
     pathlist = []
     foward = dirlist[0].split('-')[0] + '-'
     for filepath in dirlist:
-        if '.' in filepath:#文件夹内需要打包的文件没有后缀，因此需保证所有没有后缀的文件是打包文件
+        if '.' in filepath or "CMP" in filepath:#文件夹内需要打包的文件没有后缀，因此需保证所有没有后缀的文件是打包文件
             continue
         pathlist.append(filepath.split('-')[1])
     pathlist.sort(key=lambda x: int(re.findall(r'\d+', x)[0]))#按数字大小从小到大排序
@@ -49,16 +49,17 @@ def MakeNarc(aimfile, dirpath):
 if __name__ == "__main__":
     import sys
     if len(sys.argv) != 2:
-        print("使用方法: .\MakeNarc.py <原Narc文件名>")
+        print("使用方法: python .\MakeNarc.py <Narc文件名>")
     else:
         aimfile = sys.argv[1]
         dirpath = aimfile + '_extr'
         try:
             if os.path.exists(dirpath):
                 MakeNarc(aimfile, dirpath)
+                print(f"已完成打包，打包后的文件是在与本程式脚本同目录下的{'New_'+aimfile}.")
             else:
                 raise FileExistsError(f"{dirpath}不存在，请确认是否已利用ExtractNarc.py从目标Narc中正确提取了Nftr文件")
         except Exception as e:
             print(f"错误：{e}，请重新操作。")
-            
+            input("按任意键结束...")
             

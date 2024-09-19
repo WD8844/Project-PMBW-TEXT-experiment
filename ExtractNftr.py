@@ -40,10 +40,11 @@ def ExtractNftr(filepath):
 if __name__ =="__main__":
     import sys
     if len(sys.argv) != 2:
-        print("使用方法: .\ExtractNftr.py <Nftr文件路径>")
+        print("使用方法: python .\ExtractNftr.py <Nftr文件路径>")
     else:
         filepath = sys.argv[1]
         try:
             ExtractNftr(filepath)
         except FileNotFoundError:
-            print(f"未找到路径为{filepath}的文件，请重新操作。")
+            print(f"未找到文件夹{filepath}，请重新操作。")
+            input("按任意键结束...")

@@ -80,7 +80,7 @@ def main_CHS(CHSCodeSource,FONT,ofilepath,bpp,fontsize = 12,reshape = (0,0),meth
 if __name__ == "__main__":
     import sys
     if len(sys.argv) != 9:
-        print("使用方法: .\MakeFonts_main.py <中文码表文件> <中文字体文件：例如SIMSUN2.TTC> <bpp：1|2|4|8> \
+        print("使用方法: python .\MakeFonts_main.py <中文码表文件> <中文字体文件：例如SIMSUN2.TTC> <bpp：1|2|4|8> \
         <字体大小> <单字模宽width> <单字模高height> <阴影方法：rightdownShadow|blodShadow> <输出文件路径>")
     else:
         CHSCodeSource = sys.argv[1]

@@ -23,7 +23,7 @@ def MakeFonts_BW_CHS(CHSCodeSource,FONT,narcfilename,bpp=2):
 if __name__ == "__main__":
     import sys
     if len(sys.argv) != 4:
-        print("使用方法: .\MakeFonts_main.py <码表> <字形文件（*.ttf|*.ttc）> <Nftr对应的原Narc名>")
+        print("使用方法: python .\MakeFonts_main.py <码表> <字形文件（*.ttf|*.ttc）> <Nftr对应的原Narc名>")
         exit()
     else:
         CHSCodeSource = sys.argv[1]

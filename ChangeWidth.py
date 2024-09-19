@@ -107,7 +107,7 @@ def ChangeWidth(newCodeListpath,narcFilename,encoding='utf-16'):
 if __name__ =="__main__":
     import sys,os
     if len(sys.argv) != 3:
-        print("使用方法: .\ChangeWidth.py <新码表> <Nftr对应的原Narc名>")
+        print("使用方法: python .\ChangeWidth.py <新码表> <Nftr对应的原Narc名>")
     else:
         NCpath = sys.argv[1]
         narcname = sys.argv[2]
@@ -119,3 +119,4 @@ if __name__ =="__main__":
                 raise FileExistsError(f"{extrpath}不存在，请确认是否已利用ExtractNarc.py从目标Narc中正确提取了Nftr文件")
         except Exception as e:
             print(f"錯誤: {e}，请重新操作。")
+            input("按任意键结束...")

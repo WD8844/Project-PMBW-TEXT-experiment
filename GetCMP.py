@@ -60,7 +60,7 @@ def CMP(jpfilepath, chfilepath,encoding= 'utf-16',mknewdir = False):#输入文�
     return output_filepath
 
 #将CMP生成的对照文本留下翻译部分（翻译工作完成后使用）
-def KeepTH(cmpfilepath,encoding = 'utf-16',mknewdir = False):
+def KeepTH(cmpfilepath,dirpath=None,encoding = 'utf-16',name = None):
     with open(cmpfilepath,'r',encoding=encoding)as cmpfile:
         cmptexts = cmpfile.readlines()
         cmp_entrytexts = MakeString.maketxtput(cmptexts)
@@ -75,46 +75,43 @@ def KeepTH(cmpfilepath,encoding = 'utf-16',mknewdir = False):
                     writetexts.extend(sp[1]+subline)
             else:
                 raise KeyError("当前文本在第{}节处没有分块标识！".format(i))
-
         if '/' in cmpfilepath:
-            finda = re.findall(r'(.*)/(.*)',cmpfilepath)
-            comb = re.findall(r'(.*)_(.*)',finda[0][1])
-            version = comb[0][1][0]
-            num = comb[0][1][1:]
-            transpath = version +"(CH)"+ num
-            if mknewdir:
-                dirpath = finda[0][0] + '/' + version + num[0] +"_TH/"
-                try:
-                    os.mkdir(dirpath)
-                    print(dirpath+" 已创建！")
-                except FileExistsError:
-                    print("对应文件夹{}已存在。".format(dirpath))
-                    pass
-                output_filepath = dirpath + transpath
-            else:
-                output_filepath = finda[0][0] + '/' + transpath
+                finda = re.findall(r'(.*)/(.*)',cmpfilepath)
+                comb = re.findall(r'(.*)_(.*)',finda[0][1])
+                version = comb[0][1][0]
+                num = comb[0][1][1:]
         else:
-            comb = re.findall(r'(.*)_(.*)',cmpfilepath)
-            version = comb[0][1][0]
-            num = comb[0][1][1:]
-            if mknewdir:
-                dirpath = version + num[0] +"_TH/"
-                try:
-                    os.mkdir(dirpath)
-                    print(dirpath+" 已创建！")
-                except FileExistsError:
-                    print("对应文件夹{}已存在。".format(dirpath))
-                    pass
-                output_filepath = dirpath + version +"(CH)"+ num
+                comb = re.findall(r'(.*)_(.*)',cmpfilepath)
+                version = comb[0][1][0]
+                num = comb[0][1][1:]
+        if dirpath:
+            if dirpath[-1]!="/":
+                dirpath = dirpath+"/"
+        else:
+            if '/' in cmpfilepath:
+                dirpath = finda[0][0] + '/' + version + num[0] +"_TH/"
             else:
-                output_filepath= version +"(CH)"+ num
+                dirpath = version + num[0] +"_TH/"
+            try:
+                os.mkdir(dirpath)
+                print(dirpath+" 已创建！")
+            except FileExistsError:
+                print("对应文件夹{}已存在。".format(dirpath))
+                pass
+        if name:
+            output_filepath = dirpath + name + num[1:]
+        else:
+            output_filepath = dirpath + version + num
         print(output_filepath)
         textsrteam = "".join(writetexts)
         with open(output_filepath,'w',encoding=encoding)as w:
             w.write(textsrteam)
+        with open(output_filepath.replace(".txt",""),'w',encoding=encoding):
+            pass#For InjectTXTNarc
+    return dirpath
 
 if __name__ == "__main__":#This is just for code testing
     jpfilepath = './testdir/B(JP)2-44.txt'
     chfilepath = './testdir/B(CH)2-44.txt'
     cmpfilepath = CMP(jpfilepath,chfilepath,mknewdir=True)
-    KeepTH(cmpfilepath,mknewdir=True)
+    KeepTH(cmpfilepath)

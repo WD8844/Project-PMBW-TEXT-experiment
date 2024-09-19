@@ -164,7 +164,7 @@ if __name__ == "__main__":
     import sys,os
     #检查是否提供了参数
     if len(sys.argv) != 2:
-        print("使用方法: .\InjectNftr.py <原Narc的文件路径>")
+        print("使用方法: python .\InjectNftr.py <原Narc的文件名>")
     else:
         narcname = sys.argv[1]
         extrpath = narcname+"_extr/"

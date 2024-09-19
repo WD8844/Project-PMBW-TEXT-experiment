@@ -15,3 +15,4 @@ if __name__ == "__main__":
             raise FileExistsError(f"{dirpath}不存在，请确认是否已利用ExtractNarc.py从目标Narc中正确提取了Nftr文件")
     except Exception as e:
         print(f"錯誤: {e}，请重新操作。")
+        input("按任意键结束...")

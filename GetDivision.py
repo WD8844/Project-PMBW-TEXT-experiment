@@ -74,4 +74,4 @@ if __name__ == "__main__":#This is just for code testing
     with open(filepath,encoding='utf-16')as f:
         txtDivision_byBlock(f.readlines(), filepath = filepath,mknewdir = True)
     #重新组合复原
-    txtCombine_byBlock(filepath,fmnewdir= True)
+    txtCombine_byBlock(filepath,fmnewdir = True)

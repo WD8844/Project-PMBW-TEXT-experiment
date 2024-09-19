@@ -1,7 +1,7 @@
 import GetCMP, GetDivision
 import os,re
 
-#批量构造CMP整体对比文本
+#批量构造CMP整体原译对照文本
 def MakeCMP(jpdirpath,chdirpath,encoding = 'utf-16',mknewdir = False):
     jpfileslist = os.listdir(jpdirpath)
     chfileslist = os.listdir(chdirpath)
@@ -22,7 +22,7 @@ def MakeCMP(jpdirpath,chdirpath,encoding = 'utf-16',mknewdir = False):
     CMP_path = finda[0][0]
     return CMP_path
 
-#批量分片经由CPM处理过后的整体文本
+#批量分片经由CMP处理过后的整体对照文本，将其按块分开
 def DivCMP(CMPdirpath,blocknums = 2,encoding = 'utf-16',mknewdir = False):
     if CMPdirpath[-1]!="/":#补充路径尾部缺失的/方便后续拼接操作
         CMPdirpath += "/"
@@ -59,7 +59,7 @@ def Div_Restore(CMPdirpath,blocknums = 2,encoding = 'utf-16',fmnewdir = False):
         GetDivision.txtCombine_byBlock(CMPpath,blocknums = blocknums,encoding = encoding,fmnewdir = fmnewdir)
 
 #批量将CMP文本只保留翻译部分
-def MakeCMP_TH(CMPdirpath,encoding = 'utf-16',mknewdir = False):
+def MakeCMP_TH(CMPdirpath,dirpath=None,encoding = 'utf-16',name = None):
     if CMPdirpath[-1]!="/":#补充路径尾部缺失的/方便后续拼接操作
         CMPdirpath += "/"
     filelist = os.listdir(CMPdirpath)
@@ -73,19 +73,25 @@ def MakeCMP_TH(CMPdirpath,encoding = 'utf-16',mknewdir = False):
                     CMPlist.append(filepath)
     for CMPpath in CMPlist:
         CMPpath = CMPdirpath + CMPpath
-        GetCMP.KeepTH(CMPpath,encoding = encoding,mknewdir = mknewdir)
+        path = GetCMP.KeepTH(CMPpath,dirpath=dirpath,encoding = encoding,name=name)
+    return path
 
 if __name__ == "__main__":#This is just for code testing
-    for i in range(2,4):
-        num = str(i)
-        nstr = num + '_extr'
-        jpdir = 'B(JP)'
-        chdir = 'B(CH)'
-        jpdirpath = jpdir + nstr
-        chdirpath = chdir + nstr
-        blocknums = 2
-        encoding = 'utf-16'
-        CMPdirpath = MakeCMP(jpdirpath,chdirpath,encoding = encoding,mknewdir = True)
-        DivCMP(CMPdirpath,blocknums = blocknums,encoding = encoding,mknewdir = True)
-        Div_Restore(CMPdirpath,blocknums = blocknums,encoding = encoding,fmnewdir = True)
-        MakeCMP_TH(CMPdirpath,encoding = encoding,mknewdir = True)
+    import sys
+    # 检查是否提供了参数
+    if len(sys.argv) != 3:
+        print("使用方法: python .\MakeCMP_Div.py <原Narc文件名> <新Narc文件名>")
+    else:
+        jpdir = sys.argv[1]
+        chdir = sys.argv[2]
+        for i in range(2,4):
+            num = str(i)
+            nstr = num + '_extr'
+            jpdirpath = jpdir + nstr
+            chdirpath = chdir + nstr
+            blocknums = 2
+            encoding = 'utf-16'
+            CMPdirpath = MakeCMP(jpdirpath,chdirpath,encoding = encoding,mknewdir = True)
+            DivCMP(CMPdirpath,blocknums = blocknums,encoding = encoding,mknewdir = True)
+            Div_Restore(CMPdirpath,blocknums = blocknums,encoding = encoding,fmnewdir = True)
+            MakeCMP_TH(CMPdirpath,encoding = encoding,mknewdir = True)

@@ -22,11 +22,11 @@ def Total_txt(nftrfilepath,dirpath = "./"):
         for l in llists:
             s = l[0] + "=" +l[1] + "\n"
             w.write(s)
-
-if __name__ == "__main__":
+    return totalpath
+if __name__ == "__main__":#Just for the code test.
     nftrfile = 'a023'
     dirpath = 'a023_extr/'
     for i in range(3):
         nftrfilepath = nftrfile + "-" + str(i)
         Total_txt(nftrfilepath,dirpath = dirpath)
-#中文部分覆盖在603~3724即：025b~0e8b
+

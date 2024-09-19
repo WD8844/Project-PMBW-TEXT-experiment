@@ -39,7 +39,7 @@ if __name__ =="__main__":
     # 检查是否提供了参数
 
     if len(sys.argv) != 3:
-        print("使用方法: .\ExtractNarc.py <Narc文件路径> <处理类型：输入text或file>")
+        print("使用方法: python .\ExtractNarc.py <Narc文件路径> <处理类型：输入text或file>")
     else:
         filepath = sys.argv[1]
         type = sys.argv[2]
@@ -48,5 +48,5 @@ if __name__ =="__main__":
             ExtractNarc(filepath,dirpath,type = type)
         except FileNotFoundError:
             print(f"未找到路径为{filepath}的文件，请重新操作。")
-
+            input("按任意键结束...")
 
