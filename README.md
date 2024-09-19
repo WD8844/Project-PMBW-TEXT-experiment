@@ -176,7 +176,7 @@ a023_extr内应当有：解包后按照编号命名的文件块（无后缀）
 →直接执行CMP_Div_main.py脚本按照提示组合文本。
 
 #### 示例
-依然以 1.准备工作 中的示例文件命名为例：
+依然以示例文件命名为例：
 ```
 >> python CMP_Div_main.py
 
@@ -213,7 +213,7 @@ a023_extr内应当有：解包后按照编号命名的文件块（无后缀）
 →直接执行CodeList_main.py按照提示制作新码表。
 
 ### 示例
-依然以 1.准备工作 中的示例文件命名为例：
+依然以示例文件命名为例：
 
 ```
 >> python .\CodeList_main.py
@@ -246,7 +246,7 @@ a023-2_Total.txt，
 ### 制作中文字库
 用MakeFonts_main.py参照CHS.TBL做中文字库。
 #### 示例
-依然以 1.准备工作 中的示例文件命名为例：
+依然以示例文件命名为例：
 ```
 >> python .\MakeFonts_main.py CHS.TBL SIMSUN2.TTC a023
 ```
@@ -289,7 +289,7 @@ a023-2-chs
 # 将新Narc导入ROM
 使用[tinke](https://github.com/pleonex/tinke)读取*.nds将a/0/0/2、a/0/0/3和a/0/2/3这三个Narc文件对应替换后保存。
 
-以 1.准备工作 中的示例文件命名为例：
+以示例文件命名为例：
 
 将a/0/0/2替换为New_B(CH)2，将a/0/0/3替换为New_B(CH)3，将a/0/2/3替换为New_a023.
 
