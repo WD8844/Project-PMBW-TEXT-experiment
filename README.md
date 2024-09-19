@@ -288,7 +288,7 @@ a023-2-chs
 ```
 这样就在脚本的同级目录下得到了打包后的新字库New_a023的Narc.
 
-# 将新Narc导入ROM
+# 4.将新Narc导入ROM
 使用[tinke](https://github.com/pleonex/tinke)读取*.nds将a/0/0/2、a/0/0/3和a/0/2/3这三个Narc文件对应替换后保存。
 
 以示例文件命名为例：
