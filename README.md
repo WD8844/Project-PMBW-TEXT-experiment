@@ -193,7 +193,7 @@ a023_extr内应当有：解包后按照编号命名的文件块（无后缀）
 ### 导入文本到对应Narc分片中
 →用InjectTXTNarc.py批量导入分片。
 #### 示例
-依然以 1.准备工作 中的示例文件命名为例：
+依然以示例文件命名为例：
 
 ```
 >> python .\InjectTXTNarc.py B(CH)3
@@ -204,7 +204,7 @@ a023_extr内应当有：解包后按照编号命名的文件块（无后缀）
 ### 打包Narc
 →用MakeNarc.py打包文本Narc生成对应的New_Narc
 #### 示例：
-依然以 1.准备工作 中的示例文件命名为例：
+依然以示例文件命名为例：
 ```
 >> python .\MakeNarc.py B(CH)3
 ```
@@ -265,7 +265,7 @@ a023-2-chs
 ### 修改字符宽度表
 →用Change三件套修改Width、Bitmap和CodeList，直接执行ChangeBCW_main.py按提示操作。
 #### 示例
-依然以 1.准备工作 中的示例文件命名为例：
+依然以示例文件命名为例：
 ```
 >> python .\ChangeBCW_main.py
 
@@ -280,7 +280,7 @@ a023-2-chs
 
 →MakeNarc.py打包字库。
 #### 示例
-依然以 1.准备工作 中的示例文件命名为例：
+依然以示例文件命名为例：
 ```
 >> python .\InjectNftr.py a023
 
