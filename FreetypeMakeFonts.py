@@ -1,3 +1,4 @@
+#This model is not completed. Particularly, 8bpp font methods need to improve, tough they are not effect in Projec PMBW.
 import freetype,struct
 from GlyphEntry import GlyphEntry
 #Freetype对于SIMSUN2.TTC这类字体默认生成的字体是1bpp，一行2Byte；拓展为2bpp；拓展为N bpp 后，一行会变成2*N Byte
