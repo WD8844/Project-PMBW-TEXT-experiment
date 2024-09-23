@@ -84,6 +84,10 @@ def ChangeWidth(newCodeListpath,narcFilename,encoding='utf-16'):
                     nwidth.append(max(widths)-3)
                     nadvance.append(max(advances)-2)
                     nleft.append(2)
+                elif locs[i] == 213:#…
+                    nwidth.append(widths[i])
+                    nleft.append(lefts[i])
+                    nadvance.append(advances[i]+1)
                 elif (locs[i] >= 4934 and locs[i] <= 4959) or (locs[i] >= 4966 and locs[i] <= 4991):#全角字母
                     nwidth.append(widths[i])
                     if advances[i] < max(advances):
