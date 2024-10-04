@@ -27,9 +27,7 @@ a/0/0/3提取出来的3 重命名为 B(JP)3
 
 a/0/2/3提取出来的3 重命名为 a023
 
-将这些Narc文件与*.py放在同级目录下，在控制台Command Line(CMD)中按
-
-执行语句：
+将这些Narc文件与*.py放在同级目录下，在控制台Command Line(CMD)中执行语句：
 
 ```
 >> python ExtractNarc.py B(JP)2 text
