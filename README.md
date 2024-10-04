@@ -15,10 +15,11 @@ a/0/0/3 剧情文本集
 a/0/2/3 字体集（字库）
 
 ## Narc解包
+用ExtractNarc.py <narc文件名> <处理类型：输入text（文本）或file（其它）>
 ### 示例
 *此处仅为使用方法的示例*
 
-為了方便後續操作，建议将上述通过tinke提取出来的文件重命名，以日版(JP)的Narc文件为例：
+為方便後續操作，建议将上述通过tinke提取出来的文件重命名，以日版(JP)的Narc文件为例：
 
 a/0/0/2提取出来的2 重命名为 B(JP)2
 
@@ -28,7 +29,7 @@ a/0/2/3提取出来的3 重命名为 a023
 
 将这些Narc文件与*.py放在同级目录下，在控制台Command Line(CMD)中按
 
-ExtractNarc.py <narc文件名> <处理类型：输入text（文本）或file（其它）>执行语句：
+执行语句：
 
 ```
 >> python ExtractNarc.py B(JP)2 text
