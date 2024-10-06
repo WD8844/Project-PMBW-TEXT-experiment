@@ -15,13 +15,28 @@ if __name__ == "__main__":
                         nftrfilepath = nftrfile + "-" + str(i)
                         totalpath = CodeListTotal.Total_txt(nftrfilepath,dirpath = dirpath)
                         tlist.append(totalpath)
-                    i = input(f"已在程式脚本同目录下生成3个字库对应的全码表\n{tlist[0]}\n{tlist[1]}\n{tlist[2]}\n这3个码表的内容应当完全相同。"
+                    i = input(f"已在程式脚本同目录下生成3个字库对应的全码表\n{tlist[0]}、\n{tlist[1]}、\n{tlist[2]}，\n这3个码表的内容应当完全相同。"
                               f"\n确认无误后，请任选一个码表作为原始码表（输入0，1，2中的任意一个数字）：")
                     totalCLpath = tlist[int(i)]
             else:
                 input("未给出正确指令，请按任意键结束...")
                 exit()
-            textspath = input("请输入翻译后的文本*.txt所在的文件夹路径：")
+            c = input("翻译后的文本*.txt放在多个文件夹中吗？输入Y为是，N为否：")
+            if c == "Y":
+                textspath = []
+                pos = 1
+                while True:
+                    tp = input(f"请输入第{pos}个路径（输入“END”或按ENTER结束）：")
+                    if tp == "" or tp == "END":
+                        break
+                    else:
+                        pos += 1
+                        textspath.append(tp)
+            elif c == "N":
+                textspath = input("请输入翻译后的文本*.txt所在的文件夹路径：")
+            else:
+                input("未给出正确指令，请按任意键结束...")
+                exit()
             coverL = SetCharCounts(textspath)
             tbl= "CHS.TBL"
             with open(tbl,"w",encoding='utf-16')as w:
