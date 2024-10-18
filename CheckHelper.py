@@ -134,7 +134,7 @@ def charCodeChecker(dirpath):
         if char not in simplified_chinese_chars:
             print(char)
 
-if __name__ == "__main__":
+if __name__ == "__main__":#Just for the files which are named as the same formation as <B(CH)2>.
     controlChecker()
     #charCodeChecker(['./B(CH)2_extr','./B(CH)3_extr'])
 
