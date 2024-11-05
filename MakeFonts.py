@@ -6,10 +6,7 @@ def MakeFont_1bppTo(char,FONT,fontsize,bpp,reshape = (0,0),method = "rightdownSh
         blod = True
     else:
         blod = False
-    font = CharBitmapCreator(char,FONT,fontsize = fontsize,blod=blod)
-    bitmapbuffer = font.buffer
-    if len(bitmapbuffer)==0:
-        raise LookupError(f"生成的bitmapbuffer为0，当前字符为：{char}，生成字体失败！")
+    bitmapbuffer = CharBitmapCreator(char,FONT,fontsize = fontsize,blod=blod).buffer
     if bpp == 1:
         data = bitmapbuffer
     elif bpp == 2:
@@ -27,50 +24,36 @@ def MakeFont_1bppTo(char,FONT,fontsize,bpp,reshape = (0,0),method = "rightdownSh
         buffer = reshape16(buffer,width=width,height=height,bpp=bpp,blod=blod)
     return buffer
 
-def MakeFont_8bppTo(char,FONT,fontsize,bpp,reshape = (0,0)):#未完工
-    bitmapbuffer = CharBitmapCreator(char,FONT,fontsize = fontsize).buffer
+def MakeFont_8bppTo(char,FONT,fontsize,bpp,method = 'gamma',baseline = None):
+    font = CharBitmapCreator(char,FONT,fontsize = fontsize)
+    bitmapbuffer = font.buffer
+    sourcebuffer = debpp(bitmapbuffer,width=font.width, bpp = 8, dbpp = bpp,method = method)
+    font.buffer = sourcebuffer
+    qbuffer = full_Q(font,fontsize,bpp,baseline = baseline).buffer
+    divnum = 8/bpp
+    size = int(fontsize*fontsize/divnum)
+    if size != len(qbuffer):# The length of qbuffer which has been filled by fontsize should be equal to (fontsize*fontsize/divnum)
+        raise ValueError(f"可能是baseline选取不当。当前字符 {char}，正确的Byte长度为{size}，但实际长度为{len(qbuffer)}。")
+    return qbuffer
 
-def main(CodeSource,FONT,ofilepath,bpp,fontsize = 12,reshape = (0,0),method = "rightdownShadow",bitmaps = '1bppTo'):
-    Codelist = open(CodeSource,"rt",encoding="utf16")
-    Fontlist = []
-    for line in Codelist:
-        if '==' in line:
-            Fontlist.append('=')#防止映射为字符“=”被split处理掉
-        else:
-            s=line.split("=")
-            Fontlist.append(s[1].strip("\n"))
-    bufferList = []
-    if bitmaps == '1bppTo':
-        for char in Fontlist:
-            bufferList.extend(MakeFont_1bppTo(char,FONT,fontsize,bpp,reshape,method = method))
-    elif bitmaps == "8bppTo":
-        for char in Fontlist:
-            bufferList.extend(MakeFont_8bppTo(char,FONT,fontsize,bpp,reshape))
-    else:
-        raise TypeError("未指定正确的bpp转换类型。")
-    with open(ofilepath,'wb') as f:
-        for i in bufferList:
-            f.write(struct.pack('B',i))
-
-def main_CHS(CHSCodeSource,FONT,ofilepath,bpp,fontsize = 12,reshape = (0,0),method = "rightdownShadow",bitmaps = '1bppTo'):
-    CHSCodelist = open(CHSCodeSource,"rt",encoding="utf16")
+def main(CHSCodeSource,FONT,ofilepath,bpp,
+         fontsize = 12,method = "rightdownShadow",bitmaps = '1bppTo',encoding = "utf16",
+         reshape = None,baseline = None):
+    CHSCodelist = open(CHSCodeSource,"rt",encoding=encoding)
     CHSFontlist = []
     for line in CHSCodelist:
-        trans = line.split("=")
-        if '==' in line:#全码表会有=，但是中文码不需要
-            continue
-        s = trans[1].strip("\n")
-        bo = (ord(s) >= 0x4E00) and (ord(s) <= 0x9FFF)#中文编码范围
-        if bo:
-            #print(s)
-            CHSFontlist.append(s)
+        if '==' in line:
+            CHSFontlist.append('=')#防止映射为字符“=”被split处理掉
+        else:
+            s=line.split("=")
+            CHSFontlist.append(s[1].strip("\n"))
     bufferList = []
     if bitmaps == '1bppTo':
         for char in CHSFontlist:
-            bufferList.extend(MakeFont_1bppTo(char,FONT,fontsize,bpp,reshape,method = method))
+            bufferList.extend(MakeFont_1bppTo(char, FONT, fontsize, bpp, reshape=reshape,method=method))
     elif bitmaps == "8bppTo":
         for char in CHSFontlist:
-            bufferList.extend(MakeFont_8bppTo(char,FONT,fontsize,bpp,reshape))
+            bufferList.extend(MakeFont_8bppTo(char, FONT, fontsize, bpp, method=method, baseline=baseline))
     else:
         raise TypeError("未指定正确的bpp转换类型。")
     with open(ofilepath,'wb') as f:
