@@ -1,4 +1,3 @@
-#This model is not completed. Particularly, 8bpp to 4bpp font methods need to improve, though they are not effective in Projec PMBW.
 import freetype,struct
 from GlyphEntry import GlyphEntry
 #Freetype对于SIMSUN2.TTC这类字体默认生成的字体是1bpp，一行2Byte；拓展为2bpp；拓展为N bpp 后，一行会变成2*N Byte
@@ -10,7 +9,7 @@ def CharBitmapCreator(char,FONT,fontsize = 12,blod = False):
     face.load_char(char)
     buffer = []#1bpp字体前加[0,0]就是填充一行
     bitmap = face.glyph.bitmap
-    data, rows, width = bitmap.buffer, bitmap.rows, bitmap.width
+    data, rows, width, top, left = bitmap.buffer, bitmap.rows, bitmap.width, face.glyph.bitmap_top, face.glyph.bitmap_left
     #print("默认生成的(宽度，长度)：",width, rows)
     #print(len(data))
     #print(data)
@@ -29,7 +28,7 @@ def CharBitmapCreator(char,FONT,fontsize = 12,blod = False):
         buffer.extend(data)
     if blod:
         buffer.extend([0,0])
-    glyph = GlyphEntry(width = width, rows= rows,buffer = buffer)
+    glyph = GlyphEntry(width=width, rows=rows,buffer=buffer, top=top, left=left)
     return glyph
 
 def combineBytes(buffer,bpp):#将单Byte列表合并为扫描行列表（仅用于由1bpp拓展的字体）
@@ -86,7 +85,7 @@ def Upbuffer(rawList):
     UbufferList.extend(rawList[:1])#extend只能对可迭代序列（列表）进行操作
     return UbufferList
 
-def ByteDivToInt(Byte,keep,divnum = 1):#此处包括后续继承依赖此函数结果的方法仅能处理1bpp拓展字体
+def ByteDivToInt(Byte,keep,divnum):#一次仅对一个输入的Byte进行操作
     #把1Byte拆成int(8/divnum)个【能拆成的个数只会是1,2,4】并只保留keep个2进制位的int
             bits = []
             if divnum > 4:#此时int(8/divnum)==1
@@ -95,18 +94,21 @@ def ByteDivToInt(Byte,keep,divnum = 1):#此处包括后续继承依赖此函数�
                 for i in range(8):
                     bit = (Byte >> (7-i)) & keep
                     bits.append(bit)
-            elif divnum in [2,4]:#把Byte分成4个int，每个int是2位bit
+            elif divnum in [2, 4]:
                 flag = 0
-                mask = 2**divnum-1#保留的二进制位→2bpp就是1Byte拆成4份，各用0x3保留2个位
+                if divnum == 2:#把Byte分成4个int，每个int是2位bit
+                    mask = 0x3#保留的二进制位→2bpp就是1Byte拆成4份，各用0x3保留2个位
+                else:# 把Byte分成2个int，每个int是4位bit
+                    mask = 0xF#保留的二进制位→4bpp就是1Byte拆成2份，各用0xF保留4个位
                 while Byte:
-                    #print(B & mask)
-                    bits.insert(0,Byte & mask)#必须用insert保证顺序（上下保持一致）
+                    bits.insert(0, Byte & mask)#必须用insert保证顺序（上下保持一致）
                     Byte = Byte >> divnum
                     flag += 1
                 if 8 - flag*divnum:#没有用到前面的int((8 - flag*bpp)/bpp)个2进制位，补0
                     #print(int((8 - flag*bpp)/bpp))
                     for i in range(int((8 - flag*divnum)/divnum)):
-                        bits.insert(0,0)
+                        bits.insert(0, 0)
+
             else:
                 raise TypeError("无法将Byte平均拆成{}个。".format(divnum))
             return bits
@@ -114,6 +116,7 @@ def combinebpp(pixel,bpp):#输入被ByteDivToInt拆开的Byte列表（也可是�
     Bytelist = []
     flag = 0
     B = 0
+    divnum = int(8/bpp)
     if bpp == 1:#其实实现逻辑和下方的bpp==n相同，只不过使用的程序表达方法不同
         for i in range(len(pixel)):
             if flag == 7:
@@ -126,10 +129,10 @@ def combinebpp(pixel,bpp):#输入被ByteDivToInt拆开的Byte列表（也可是�
                     B = B | pixel[i]
                     flag += 1
     else:
-        for i in range(0, len(pixel)-(2*bpp-1), 2*bpp):
+        for i in range(0, len(pixel)-(divnum-1), divnum):
             B = 0
-            for j in range(2*bpp):
-                B = B | pixel[i+j] << ((2*bpp-1)-j)*bpp
+            for j in range(divnum):
+                B = B | pixel[i+j] << ((divnum-1)-j)*bpp
             Bytelist.append(B)
     return Bytelist
 
@@ -147,6 +150,7 @@ def debpp(buffer,width,bpp = 8, dbpp = 4,method = 'gamma'):#将高bpp的字模�
         return int(corrected * (2**dbpp-1))
     if bpp == 8 and bpp % 2 == 0:
         divnum = int(bpp/dbpp)#Byte分成divnum个dbpp的Byte
+        #print(divnum)
         for B in buffer:
             if method == 'gamma':
                 value = gamma_correct(B)
@@ -159,7 +163,8 @@ def debpp(buffer,width,bpp = 8, dbpp = 4,method = 'gamma'):#将高bpp的字模�
 
             pixel = value & 0xFF
             Bytes.append(pixel)
-        if width%int(8/divnum):#是奇数，每行都要填充
+        if (width%int(8/divnum))%2:#是奇数，每行都要填充
+            #print(width,width%int(8/divnum))
             NBytes = []
             for i in range(0,len(Bytes),width):
                 NBytes.extend(Bytes[i:i+width])
@@ -179,7 +184,7 @@ def trans2bpp(buffer,keep = 1):#仅用于将1bpp字体拓展为2bpp字体
         # 遍历原始列表中的每个数值
         for value in buffer:
             # 提取每个像素的索引
-            pixel = ByteDivToInt(value, keep)#keep == 1是无阴影，keep == 3就是带右阴影
+            pixel = ByteDivToInt(value, keep,1)#keep == 1是无阴影，keep == 3就是带右阴影
 
             for i in range(8):
                 if pixel[i] == 3:#字库字模没有用到3索引对应的颜色
@@ -234,39 +239,75 @@ def fillShadow2bpp(buffer,shadowbuffer):#输入字模的Byte_buffer列表和阴�
         resultpixels.append(trans)
     Newbuffer = combinebpp(resultpixels,2)
     return Newbuffer
-def full_Q(buffer,width,height,Awidth,bpp):
-    #输入宽度小于等于width的字模Bytes列表，将其填充到长宽为Awidth的方形字模Bytes列表
+def full_Q(glyph, Awidth, bpp , baseline = None):
+    buffer, width, height, top, left = glyph.buffer, glyph.width, glyph.rows, glyph.top, glyph.left
+    #输入宽度小于等于width的GlyphEntry字模对象，将其buffer填充到长宽为Awidth的方形字模Bytes列表
     # 规定Awidth>=原始width和height，由此填充（用于一般的8bpp字体）
-    addh = Awidth - height#需填充的扫描行数字模高度与宽度变化无关，先得出
-    if bpp < 8:#说明降过bpp
-        if width%(8 / bpp):#宽度不是偶数就需要补齐，输入的buffer是经过debpp已经补齐过的
-            width += int(width%(8 / bpp))
-        ColoBytesNum = int(width /(8 / bpp))#构成一个扫描行的Byte数
-        Awidth = int(Awidth/(8 / bpp))
+    Width = Awidth
+    #print(glyph.width, glyph.rows)
+    if baseline:
+        baseline = baseline
     else:
+        baseline = Awidth - int(Awidth * 0.2)
+    if bpp < 8:#说明降过bpp
+        flag = 0
+        if (width % (8 / bpp))%2:#宽度不是偶数就需要补齐，输入的buffer是经过debpp已经补齐过的
+            width += int(width % (8 / bpp))
+        ColoBytesNum = int(width /(8 / bpp))#构成一个扫描行的Byte数
+        Width = int(Awidth/(8 / bpp))
+    else:
+        flag = 1
         ColoBytesNum = width
-    addw = Awidth - ColoBytesNum#每行需填充的Byte数
-    AddRow = [0 for i in range(Awidth)]
+    addw = Width - ColoBytesNum#每行需填充的Byte数
+    AddRow = [0 for i in range(Width)]
     Newbuffer = []
     #增宽
     for i in range(0,height):#每行填充addw个值为0的Byte实现增宽
         Newbuffer.extend(buffer[ColoBytesNum*i:ColoBytesNum*i+ColoBytesNum])
         Newbuffer.extend([0 for j in range(addw)])
-    #增高
-    if addh % 2:#除不尽头部少加
-        fnum = int(addh/2)#加在头部的行数
-        lnum = int(addh/2)+1#加在尾部的行数
+    #按left调整字体位置
+    SNbuffer = []
+    for i in range(Awidth):#按给定宽度Awidth将Newbuffer分成每个长度为Awidth的列表
+        # Newbuffer的长度必定整除Awidth
+        SNbuffer.append(Newbuffer[i*Awidth:i*Awidth+Awidth])
+    if flag:#未降bpp直接按列移动
+        if left > 0:
+            for i in range(len(SNbuffer)):
+                SNbuffer[i] = SNbuffer[i][-left:] + SNbuffer[i][:-left]
     else:
-        fnum = int(addh/2)
-        lnum = fnum
+        #拆后移动再复原
+        def divcolo(colo):#按行处理
+            bits = []
+            for B in colo:
+                bits.extend(ByteDivToInt(B,bpp,bpp))
+            return bits
+        if left > 0:
+            for i in range(len(SNbuffer)):
+                bits = divcolo(SNbuffer[i])
+                bits = bits[-left:] + bits[:-left]
+                SNbuffer[i] = combinebpp(bits, bpp)
+    Newbuffer = []
+    for colo in SNbuffer:
+        Newbuffer.extend(colo)
+    #print(len(Newbuffer)/12)
+    #按top增高
+    #print(top)
+    fnum = baseline - top
+    lnum = Awidth - (fnum + height)
+    #print(fnum,lnum)
+    #print(fnum + lnum + height)
+    if fnum + lnum + height > Awidth:
+        raise ValueError(f"当前处理字符的top为：{top}，需要{fnum + lnum + height}的绘制框大小，但实际指定字体大小为{Awidth}。"
+               f"\n给定baseline与指定预生成的字体大小不符合绘制要求，请重新规定baseline操作。")
+    #print(fnum, lnum)
     transbuffer = []
     for i in range(fnum):
         transbuffer.extend(AddRow)
     for i in range(lnum):
         Newbuffer.extend(AddRow)
-    Newbuffer = transbuffer + Newbuffer
-
-    return Newbuffer
+    glyph.buffer = transbuffer + Newbuffer
+    #print(len(glyph.buffer))
+    return glyph# 返回处理完毕的字模对象
 
 def reshape16(buffer,width,height,bpp,blod = False):
     #输入宽度小于等于16的没有填充的字模Bytes列表，规定>=原始width和height，由此填充（仅用于1bpp拓展的字体）
@@ -409,20 +450,39 @@ if __name__ == "__main__":#This is just for code testing
         with open("testfont",'wb') as f:
             for I in divedeCmb(combineBytes(bitmapbuffer,1),1):
                 f.write(struct.pack('B',I))'''
-    def bpp8To4test():#8bpp到4bpp的字体降级测试
-        char = "_"
+    def bpp8To4test_cit():#测试拆bpp的方法ByteDivToInt和combinebpp
+        char = "塔"
         FONT = 'FZKT_GBK.ttf'
         fontsize = 24
         font = CharBitmapCreator(char,FONT,fontsize = fontsize)
         bitmapbuffer = font.buffer
         print(font.width,font.rows)
         sourcebuffer = debpp(bitmapbuffer,width=font.width, bpp = 8, dbpp = 4,method = 'gamma')
-        qbuffer = full_Q(sourcebuffer,font.width,font.rows,fontsize,4)
+        pxi = []
+        for B in sourcebuffer:
+            pxi.extend(ByteDivToInt(B,4,4))
+        font.buffer = combinebpp(pxi,4)
+        with open('testfont_8to4bpp_cit','wb')as f:
+            for data in font.buffer:
+                    f.write(struct.pack('B',data))
+    def bpp8To4test():#8bpp到4bpp的字体降级测试
+        char = "岸"
+        FONT = 'FZKT_GBK.ttf'
+        fontsize = 24
+        baseline = 21
+        font = CharBitmapCreator(char,FONT,fontsize = fontsize)
+        bitmapbuffer = font.buffer
+        print(font.width,font.rows)
+        sourcebuffer = debpp(bitmapbuffer,width=font.width, bpp = 8, dbpp = 4,method = 'gamma')
+        font.buffer = sourcebuffer
+        qbuffer = full_Q(font,fontsize,4,baseline=baseline).buffer
         with open('testfont_8to4bpp','wb')as f:
             for data in sourcebuffer:
                     f.write(struct.pack('B',data))
         with open('testfont_8to4bpp_Q',"wb")as f:
             for data in qbuffer:
                     f.write(struct.pack('B',data))
-    bpp1To2test()
+
+    #bpp1To2test()
     #bpp8To4test()
+    #bpp8To4test_cit()
