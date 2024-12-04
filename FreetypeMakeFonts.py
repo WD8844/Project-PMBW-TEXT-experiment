@@ -316,17 +316,18 @@ def reshape16(buffer,width,height,bpp,blod = False):
     transbuffer = combineBytes(buffer,bpp)
     addh= height-len(transbuffer)
     pixelnum = 16
-    for i in range(addh):
-        if i == 0:
-            transbuffer.insert(0,0)#只在第一个扫描行前增加一行黑色填充
-        else:
-            transbuffer.append(0)#其它填充扫描行加在尾部
+    if addh >= 0:
+        for i in range(addh):
+            transbuffer.append(0)#填充扫描行加在尾部
+    else:
+        for i in range(-addh):
+            transbuffer.pop(-1)#删除行
     if blod:#有加粗就让字体顶格
         ntbuffer = transbuffer[1:]
         ntbuffer.extend(transbuffer[:1])
         transbuffer = ntbuffer
     for i in range(len(transbuffer)):
-        transbuffer[i] = transbuffer[i] >> (16 - width)*bpp#生成的字体默认宽度永远都是16
+        transbuffer[i] = transbuffer[i] >> (pixelnum - width)*bpp#生成的字体默认宽度永远都是16
     transbuffer = divedeCmb(transbuffer,bpp)#复原为Bytes列表
     bitsbuffer = []
     for i in range(len(transbuffer)):#按bpp拆成对应的bits列表
@@ -346,7 +347,7 @@ def reshape16(buffer,width,height,bpp,blod = False):
                 bits.append(b)
         #print(len(bits))
         if (len(bits)*bpp) % 8:
-            for i in range(int((len(bits)*bpp) % 8/bpp)):
+            for i in range(8 - int(((len(bits)*bpp) % 8)/bpp)):
                 bits.append(0)#向上取整
         #print(len(bits))
     Newbuffer = combinebpp(bits,bpp)
@@ -441,15 +442,6 @@ if __name__ == "__main__":#This is just for code testing
             for d in reshapelist:
                 for i in d:
                     f.write(struct.pack('B',i))
-        '''with open("testfont",'wb') as f:
-            for I in combineBytes(data,2):
-                f.write(struct.pack('>I',I))#由于是正向扫描点阵长字节必须大端写
-        with open("testfont",'wb') as f:
-            for I in combineBytes(bitmapbuffer,1):
-                f.write(struct.pack('>H',I))
-        with open("testfont",'wb') as f:
-            for I in divedeCmb(combineBytes(bitmapbuffer,1),1):
-                f.write(struct.pack('B',I))'''
     def bpp8To4test_cit():#测试拆bpp的方法ByteDivToInt和combinebpp
         char = "塔"
         FONT = 'FZKT_GBK.ttf'
